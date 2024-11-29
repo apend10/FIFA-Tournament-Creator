@@ -68,12 +68,35 @@ if num_players and player_names:
             if i == 0:
                 st.subheader("Team Picking Order")
                 for j in range(num_players):
-                    st.write(f"#{j + 1}. {picks[i][j]}")
+                    st.markdown(
+                    f"""
+                    <div style="font-size:24px; margin-bottom:10px;">
+                        <strong>#{j + 1}</strong>: 
+                        <span style="color:tan;"><strong>{picks[i][j]}</strong></span> 
+                    </div>
+                    """, 
+                    unsafe_allow_html=True)
             else:
                 st.subheader(f"Draft for {positions[i]}")
                 for j in range(num_players):
-                    st.write(
-                        f"#{j + 1}. {picks[i][j][0]} can pick a player with a rating ≤ {picks[i][j][1]}"
-                    )
+                    color = ""
+                    if j == 0:
+                        color = "green"
+                    elif j == 1:
+                        color = "lightgreen"
+                    elif j == 2:
+                        color = "orange"
+                    else:
+                        color = "red"
+                    st.markdown(
+                    f"""
+                    <div style="font-size:24px; margin-bottom:10px;">
+                        <strong>#{j + 1}</strong>: 
+                        <span style="color:tan;"><strong>{picks[i][j][0]}</strong></span> 
+                        can pick a player with a rating ≤ 
+                        <span style="color:{color};"><strong>{picks[i][j][1]}</strong></span>
+                    </div>
+                    """, 
+                    unsafe_allow_html=True)
 else:
     st.error("No data found. Please go back to the home page and set up the tournament.")

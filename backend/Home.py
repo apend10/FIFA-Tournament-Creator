@@ -12,11 +12,11 @@ st.write("Simulate your FIFA tournament with ease. Get started by specifying the
 # Input for the number of players
 num_players = st.number_input(
     "How many players will participate?", 
-    min_value=2, 
+    min_value=3, 
     max_value=8, 
     value=4, 
     step=1, 
-    help="Enter the number of players participating in the tournament (2 to 8)."
+    help="Enter the number of players participating in the tournament (3 to 8)."
 )
 
 # Input for the player names
