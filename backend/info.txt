@@ -1,3 +1,4 @@
 Global Variables
     num_players:int
     player_names:list
+    positions:list - either 442, 352, 443

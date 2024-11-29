@@ -36,9 +36,9 @@ def main():
     people = ["Athul", "Sankar", "Vivek", "Pendi", "Aarush"]
 
     #positions lists for different formations
-    FOUR_THREE_THREE = ["TEAM", "GK", "LB", "CB", "CB", "RB", "CM", "CM", "CM", "LW", "ST", "RW"]
-    FOUR_FOUR_TWO = ["TEAM", "GK", "LB", "CB", "CB", "RB", "LM", "CM", "CM", "RM", "ST", "ST"]
-    THREE_FIVE_TWO = ["TEAM", "GK", "CB", "CB", "CB", "LM", "CM", "CM", "RM", "LW", "ST", "RW"]
+    FOUR_THREE_THREE = ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "RCM", "CM", "LCM", "LW", "ST", "RW"]
+    FOUR_FOUR_TWO = ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "LM", "LCM", "RCM", "RM", "LST", "RST"]
+    THREE_FIVE_TWO = ["TEAM", "GK", "LCB", "CB", "RCB", "LM", "LCM", "RCM", "RM", "LW", "ST", "RW"]
 
     positions = FOUR_THREE_THREE
     

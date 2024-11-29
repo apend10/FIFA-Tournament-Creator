@@ -9,6 +9,27 @@ st.title("🏆 FIFA Tournament Simulator")
 st.subheader("Welcome to the FIFA Tournament Simulator!")
 st.write("Simulate your FIFA tournament with ease. Get started by specifying the number of players.")
 
+#Input for formation
+formation = st.selectbox(
+    "Choose your formation:",
+    options=["4-3-3", "4-4-2", "3-5-2"],
+    help="Select the preferred formation for your team."
+)
+
+#positions lists for different formations
+FOUR_THREE_THREE = ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "RCM", "CM", "LCM", "LW", "ST", "RW"]
+FOUR_FOUR_TWO = ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "LM", "LCM", "RCM", "RM", "LST", "RST"]
+THREE_FIVE_TWO = ["TEAM", "GK", "LCB", "CB", "RCB", "LM", "LCM", "RCM", "RM", "LW", "ST", "RW"]
+
+match formation:
+    case "4-3-3":
+         st.session_state["positions"] = FOUR_THREE_THREE
+    case "4-4-2":
+         st.session_state["positions"] = FOUR_FOUR_TWO
+    case "3-5-2":
+         st.session_state["positions"] = THREE_FIVE_TWO
+
+
 # Input for the number of players
 num_players = st.number_input(
     "How many players will participate?", 
