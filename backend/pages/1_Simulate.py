@@ -118,7 +118,8 @@ if num_players and player_names:
             [80]]
 
     positions = st.session_state.get("positions", None)
-    picks = create_player_picks(tier, player_names, positions)
+    if "picks" not in st.session_state:
+        st.session_state["picks"] = create_player_picks(tier, player_names, positions)
     
     # display the picks in tabs
     position_tabs = st.tabs(positions)
@@ -132,7 +133,7 @@ if num_players and player_names:
                     f"""
                     <div style="font-size:24px; margin-bottom:10px;">
                         <strong>#{j + 1}</strong>: 
-                        <span style="color:tan;"><strong>{picks[i][j]}</strong></span> 
+                        <span style="color:tan;"><strong>{st.session_state["picks"] [i][j]}</strong></span> 
                     </div>
                     """, 
                     unsafe_allow_html=True)
@@ -152,9 +153,9 @@ if num_players and player_names:
                     f"""
                     <div style="font-size:24px; margin-bottom:10px;">
                         <strong>#{j + 1}</strong>: 
-                        <span style="color:tan;"><strong>{picks[i][j][0]}</strong></span> 
+                        <span style="color:tan;"><strong>{st.session_state["picks"] [i][j][0]}</strong></span> 
                         can pick a player with a rating ≤ 
-                        <span style="color:{color};"><strong>{picks[i][j][1]}</strong></span>
+                        <span style="color:{color};"><strong>{st.session_state["picks"] [i][j][1]}</strong></span>
                     </div>
                     """, 
                     unsafe_allow_html=True)
@@ -199,7 +200,6 @@ if num_players and player_names:
 #---------------------------------------------------------------------------------------------------------------------------
 # Completion Message
 #---------------------------------------------------------------------------------------------------------------------------
-    print("kjsdhfdkjhdlakjfhdlk.jhfdjsk.hfdsak.jhfsdkj")
     count = 0
     for player in st.session_state["player_teams"]:
         for i in st.session_state["player_teams"][player]:
@@ -207,8 +207,7 @@ if num_players and player_names:
                 count += 1
     print(count)
     if(count == num_players * 11):
-        print("DONEDONEDONE#@&*^&@#^$&(^$%&*(^#$(&^@#$(%$#I@E%^(#$^$#^%$&%$#^%(&$#^&#$(%#$(%))))))))")
-    print("kjsdhfdkjhdlakjfhdlk.jhfdjsk.hfdsak.jhfsdkj")
+        st.success("You've finished selecting teams, go to the Matchups tab to start playing!")
 
 #---------------------------------------------------------------------------------------------------------------------------
 # Market
@@ -257,7 +256,9 @@ if num_players and player_names:
                     print(f"{selected_player} chose {row['Name']} as their {selected_position}")
                     st.session_state["player_teams"][selected_player][positions.index(selected_position)] = row['Picture']
                     print(st.session_state["player_teams"])
+                    st.success(f"{selected_player} chose {row['Name']} as their {selected_position}")
                     show_player_teams()
+
 
         # Display the player data with images
         display_images(result)    
