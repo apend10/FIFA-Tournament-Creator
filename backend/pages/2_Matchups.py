@@ -91,12 +91,6 @@ st.session_state["league_table"] = pd.DataFrame({
         "Goal Difference": [0] * num_players
     })
 
-print(matchup_df)
-print("index: ", st.session_state["league_table"]["Teams"].to_list().index("Arsenal"))
-print("__________________________________________________________________________________")
-print(st.session_state["league_table"].loc[st.session_state["league_table"]["Teams"].to_list().index("Arsenal"), "Points"])
-print("__________________________________________________________________________________")
-
 for i in range(len(matchup_df)):
     home_index = st.session_state["league_table"]["Teams"].to_list().index(matchup_df['Home Team'][i])
     away_index = st.session_state["league_table"]["Teams"].to_list().index(matchup_df['Away Team'][i])
@@ -121,4 +115,6 @@ for i in range(len(matchup_df)):
 
             st.session_state["league_table"].loc[home_index, "Goal Difference"] += difference
 
+st.session_state['league_table'].sort_values(by=['Points', 'Goal Difference'], ascending=False, inplace=True)
+st.session_state['league_table'] = st.session_state['league_table'].set_index("Teams")
 st.table(st.session_state.get("league_table", None))
