@@ -14,6 +14,7 @@ female = "gender=1"
 # Retrieve data from session state
 num_players = st.session_state.get("num_players", None)
 player_names = st.session_state.get("player_names", None)
+formation = st.session_state.get("positions", None)
 
 #simulation logic
 def create_player_picks(tiers:list, people:list, positions:list):
@@ -174,29 +175,68 @@ if num_players and player_names:
     positions = positions[1:]
     
     def show_player_teams():
-        # Create a placeholder for the entire section
-        team_placeholders = {}
+        # Define grouped positions for each role
+        roles = {}
+        if formation == ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "RCM", "CM", "LCM", "LW", "ST", "RW"]:
+            roles = {
+                "Forwards": ["LW", "ST", "RW"],
+                "Midfielders": ["LCM", "CM", "RCM"],
+                "Defenders": ["LB", "LCB", "RCB", "RB"],
+                "Goalkeeper": ["GK"]
+            } 
+        elif formation == ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "LM", "LCM", "RCM", "RM", "LST", "RST"]:
+            roles = {
+                "Forwards": ["LST", "RST"],
+                "Midfielders": ["LM", "LCM", "RCM", "RM"],
+                "Defenders": ["LB", "LCB", "RCB", "RB"],
+                "Goalkeeper": ["GK"]
+            } 
+        elif formation == ["TEAM", "GK", "LCB", "CB", "RCB", "LM", "LCM", "CAM", "RCM", "RM", "LST", "RST"]:
+            roles = {
+                "Forwards": ["LST", "RST"],
+                "Midfielders": ["LM", "LCM", "CAM", "RCM", "RM"],
+                "Defenders": [ "LCB", "CB", "RCB",],
+                "Goalkeeper": ["GK"]
+            } 
 
+
+        # Create a placeholder for the entire section
         for player, tab in zip(player_names, team_tabs):
             with tab:
                 st.write(f"### {player}'s Team")
-                # Create placeholders for each position in the team
-                team_placeholders[player] = {}
-                for p in positions:
-                    placeholder = st.empty()  # Create a placeholder for each position
-                    team_placeholders[player][p] = placeholder
-
-        # Update placeholders dynamically
-        for player in player_names:
-            for p in positions:
-                position_index = positions.index(p)
-                player_team = st.session_state["player_teams"][player]
-                with team_placeholders[player][p]:  # Access the placeholder dynamically
-                    if player_team[position_index]:
-                        st.write(f"{p}:")
-                        st.image(player_team[position_index], width=100)
-                    else:
-                        st.write(f"{p}: None")
+                
+                # Display players grouped by role
+                for role, role_positions in roles.items():
+                    cols = st.columns(len(role_positions))  # Create columns for positions
+                    
+                    for col, position in zip(cols, role_positions):
+                        position_index = positions.index(position)
+                        player_team = st.session_state["player_teams"][player]
+                        
+                        with col:
+                            # Use markdown for centered content and maintain previous logic
+                            if player_team[position_index]:
+                                col.markdown(
+                                    f"""
+                                    <div style="text-align: center;">
+                                        <strong>{position}</strong>
+                                        <br>
+                                        <img src="{player_team[position_index]}" width="150">
+                                    </div>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
+                            else:
+                                col.markdown(
+                                    f"""
+                                    <div style="text-align: center;">
+                                        <strong>{position}</strong>
+                                        <br>
+                                        None
+                                    </div>
+                                    """,
+                                    unsafe_allow_html=True,
+                                )
 #---------------------------------------------------------------------------------------------------------------------------
 # Completion Message
 #---------------------------------------------------------------------------------------------------------------------------
@@ -206,8 +246,10 @@ if num_players and player_names:
             if len(i) > 1:
                 count += 1
     print(count)
-    if(count == num_players * 11):
+    if(count >= num_players * 11):
+        st.divider()
         st.success("You've finished selecting teams, go to the Matchups tab to start playing!")
+        show_player_teams()
 
 #---------------------------------------------------------------------------------------------------------------------------
 # Market
@@ -248,16 +290,22 @@ if num_players and player_names:
 
         # Function to display images
         def display_images(df):
-            # Display the DataFrame with images instead of URLs
-            for index, row in df.iterrows():
-                st.image(row['Picture'], width=200)  # Display image next to the player name
-                b = st.button(f"Select {row['Name']}")
-                if(b):
-                    print(f"{selected_player} chose {row['Name']} as their {selected_position}")
-                    st.session_state["player_teams"][selected_player][positions.index(selected_position)] = row['Picture']
-                    print(st.session_state["player_teams"])
-                    st.success(f"{selected_player} chose {row['Name']} as their {selected_position}")
-                    show_player_teams()
+            # Display three images per row using Streamlit's column layout
+            images_per_row = 3  # Number of images per row
+
+            for i in range(0, len(df), images_per_row):
+                row_data = df.iloc[i:i+images_per_row]  # Get data for the current row
+                cols = st.columns(images_per_row)  # Create 3 columns
+
+                for col, (_, row) in zip(cols, row_data.iterrows()):
+                    # Display image and button in the current column
+                    with col:
+                        st.image(row['Picture'], width=200)  # Show image with caption
+                        if st.button(f"Select {row['Name']}", key=f"{row['Name']}-{i}"):
+                            # Update session state with selected player
+                            st.session_state["player_teams"][selected_player][positions.index(selected_position)] = row['Picture']
+                            st.success(f"{selected_player} chose {row['Name']} as their {selected_position}")
+                            show_player_teams()
 
 
         # Display the player data with images

@@ -17,9 +17,9 @@ formation = st.selectbox(
 )
 
 #positions lists for different formations
-FOUR_THREE_THREE = ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "RCM", "CM", "LCM", "LW", "ST", "RW"]
+FOUR_THREE_THREE = ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "LCM", "CM", "RCM", "LW", "ST", "RW"]
 FOUR_FOUR_TWO = ["TEAM", "GK", "LB", "LCB", "RCB", "RB", "LM", "LCM", "RCM", "RM", "LST", "RST"]
-THREE_FIVE_TWO = ["TEAM", "GK", "LCB", "CB", "RCB", "LM", "LCM", "RCM", "RM", "LW", "ST", "RW"]
+THREE_FIVE_TWO = ["TEAM", "GK", "LCB", "CB", "RCB", "LM", "LCM", "CAM", "RCM", "RM", "LST", "RST"]
 
 match formation:
     case "4-3-3":
